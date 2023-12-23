@@ -32,7 +32,10 @@ public class SecurityConfig {
                 .csrf(Customizer.withDefaults())
                 .authorizeHttpRequests(ar->ar.requestMatchers("/","/oauth2Login/**","/webJars/**","/h2-console/**").permitAll())
                 .authorizeHttpRequests(ar-> ar.anyRequest().authenticated())
-                .oauth2Login(lg->lg.loginPage("/oauth2Login")
+                .headers(h->h.frameOptions(fo->fo.disable()))
+                .csrf(csrf->csrf.ignoringRequestMatchers("/h2-console/**"))
+                .oauth2Login(lg->
+                        lg.loginPage("/oauth2Login")
                         .defaultSuccessUrl("/"))
                 .logout((logout)->logout
                         .logoutSuccessHandler(oidcLogoutSuccessHandler())
